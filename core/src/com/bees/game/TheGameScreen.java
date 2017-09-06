@@ -154,8 +154,6 @@ public class TheGameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         this.scrollingBackground.resize(width, height);
-
-
     }
 
     @Override
@@ -179,6 +177,5 @@ public class TheGameScreen implements Screen {
         bucketImage.dispose();
         dropSound.dispose();
         rainMusic.dispose();
-
     }
 }

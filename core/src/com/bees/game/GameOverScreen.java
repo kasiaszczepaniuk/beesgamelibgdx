@@ -6,79 +6,58 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import javax.xml.transform.Templates;
 
 import static com.bees.game.MyBeesGame.HEIGHT;
 import static com.bees.game.MyBeesGame.WIDTH;
 
-public class MainMenuScreen implements Screen {
-
+public class GameOverScreen implements Screen{
     final MyBeesGame game;
-    public Texture backgroundMenu;
-    public SpriteBatch batch3;
+    public final Texture gameoverback;
+    public final Texture trybutton;
+    private final int tryButtonWidth;
+    private final int trybuttonX;
+    private final int tryButtonY;
+    private final int quitButtonY;
+    private final int quitButtonWidth;
+    private final Texture quit;
+    private final int quitButtonX;
     OrthographicCamera camera;
-    private Texture start;
-    private Texture stillgame;
-    private Texture quit;
-    private int playButtonY;
-    private int playButtonWidth;
-    private int buttonX;
-    private int conButtonY;
-    private int conButtonWidth;
-    private int conButtonX;
-    private int quitButtonY;
-    private int quitButtonWidth;
-    private int quitButtonX;
 
 
+    public GameOverScreen(final MyBeesGame game) {
 
-
-    public MainMenuScreen(final MyBeesGame game) {
         this.game = game;
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
-        backgroundMenu = new Texture("backbuttons.png");
-        start = new Texture(Gdx.files.internal("start.png"));
-
-        stillgame = new Texture(Gdx.files.internal("continue.png"));
-        quit = new Texture(Gdx.files.internal("quit.png"));
+        gameoverback = new Texture("gameoverback.png");
+        trybutton = new Texture("trybutton.png");
+        quit = new Texture("quit.png");
 
 
-        //PLAY BUTTON
-        playButtonY = 550;
-        playButtonWidth = start.getWidth();
-        buttonX = MyBeesGame.WIDTH / 2 - playButtonWidth / 2;
-
-        //CONTINUE BUTTON
-
-        conButtonY = 400;
-        conButtonWidth = stillgame.getWidth();
-        conButtonX = MyBeesGame.WIDTH / 2 - conButtonWidth / 2;
-
-
+//        //TRYAGAIN BUTTON
+          tryButtonWidth = trybutton.getWidth();
+          trybuttonX = (2* MyBeesGame.WIDTH / 3 ) - tryButtonWidth / 2 ;
+          tryButtonY = 200;
 
         //QUITBUTTON
-        quitButtonY = 250;
+        quitButtonY = 90;
         quitButtonWidth = quit.getWidth();
-        quitButtonX = MyBeesGame.WIDTH / 2 - quitButtonWidth / 2;
-
-
+        quitButtonX = (2*MyBeesGame.WIDTH / 3) - quitButtonWidth / 2;
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                //START BUTTON
-                if ((buttonX < screenX && buttonX + playButtonWidth > screenX)
-                        && (MyBeesGame.HEIGHT - getInputInGameWorld(camera).y < playButtonY + start.getHeight() && MyBeesGame.HEIGHT - getInputInGameWorld(camera).y > playButtonY)) {
+                //TRY BUTTON
+                if ((trybuttonX < screenX && trybuttonX + tryButtonWidth > screenX)
+                        && (MyBeesGame.HEIGHT - getInputInGameWorld(camera).y < tryButtonY + trybutton.getHeight() && MyBeesGame.HEIGHT - getInputInGameWorld(camera).y > tryButtonY)) {
                     dispose();
                     game.setScreen(new TheGameScreen(game));
                 }
-
-
                 //QUIT BUTTON
                 if ((quitButtonX < screenX && quitButtonX + quitButtonWidth > screenX)
                         && (MyBeesGame.HEIGHT - getInputInGameWorld(camera).y < quitButtonY + quit.getHeight() && MyBeesGame.HEIGHT - getInputInGameWorld(camera).y > quitButtonY)) {
@@ -88,11 +67,16 @@ public class MainMenuScreen implements Screen {
 
 
 
+
+
                 return super.touchDown(screenX, screenY, pointer, button);
             }
         });
-    }
+//
+//
 
+
+    }
 
     @Override
     public void show() {
@@ -101,30 +85,18 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-
-
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
+
         game.batch.begin();
-
-        game.batch.draw(backgroundMenu, 0, 0);
-        game.batch.draw(start, buttonX, playButtonY);
-        game.batch.draw(stillgame, conButtonX, conButtonY);
-        game.batch.draw(quit, quitButtonX, quitButtonY);
-
-
+        game.batch.draw(gameoverback, 0, 0);
+        game.batch.draw(trybutton, trybuttonX , tryButtonY);
+        game.batch.draw(quit,quitButtonX, quitButtonY);
         game.batch.end();
-
-//        if (Gdx.input.isTouched()) {
-//            if(start.getWidth())
-//            game.setScreen(new TheGameScreen(game));
-//            dispose();
-//        }
 
     }
 
@@ -150,8 +122,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        backgroundMenu.dispose();
-        start.dispose();
 
     }
 

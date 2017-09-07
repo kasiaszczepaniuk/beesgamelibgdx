@@ -21,7 +21,7 @@ import java.util.Iterator;
 import static com.bees.game.MyBeesGame.HEIGHT;
 import static com.bees.game.MyBeesGame.WIDTH;
 
-public class TheGameScreen implements Screen {
+public class TheGameScreen extends MyBeesGame implements Screen {
     final MyBeesGame game;
     private Texture dropImage;
     private Texture bucketImage;
@@ -52,7 +52,7 @@ public class TheGameScreen implements Screen {
 
         // load the drop sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.wav"));
 
         // start the playback of the background music immediately
         rainMusic.setLooping(true);
@@ -143,7 +143,13 @@ public class TheGameScreen implements Screen {
                 iter.remove();
             }
         }
+        if ((score >= 10)  )
+        {
+            this.dispose();
+            game.setScreen(new GameOverScreen(game));
+            return;
 
+        }
 
     }
     @Override

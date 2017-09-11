@@ -16,6 +16,7 @@ import static com.bees.game.MyBeesGame.WIDTH;
 public class MainMenuScreen implements Screen {
 
     final MyBeesGame game;
+
     public Texture backgroundMenu;
     public SpriteBatch batch3;
     OrthographicCamera camera;
@@ -68,6 +69,7 @@ public class MainMenuScreen implements Screen {
 
 
 
+
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -112,7 +114,7 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-        game.batch.draw(backgroundMenu, 0, 0);
+        game.batch.draw(backgroundMenu, 0, 0, MyBeesGame.WIDTH, MyBeesGame.HEIGHT);
         game.batch.draw(start, buttonX, playButtonY);
         game.batch.draw(stillgame, conButtonX, conButtonY);
         game.batch.draw(quit, quitButtonX, quitButtonY);
@@ -152,6 +154,9 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
         backgroundMenu.dispose();
         start.dispose();
+        stillgame.dispose();
+        quit.dispose();
+        Gdx.input.setInputProcessor(null);
 
     }
 

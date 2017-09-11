@@ -39,8 +39,11 @@ public class TheGameScreen extends MyBeesGame implements Screen {
 
 
 
+
     public TheGameScreen(final MyBeesGame game){
         this.game = game;
+
+
 
         score = 0;
         yourScoreName = "score: 0";
@@ -102,7 +105,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
 
         scrollingBackground.updateAndRender(Gdx.graphics.getDeltaTime(), game.batch);
         yourBitmapFontName.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        yourBitmapFontName.draw(game.batch, yourScoreName, Gdx.graphics.getWidth()-400, Gdx.graphics.getHeight()-100);
+        yourBitmapFontName.draw(game.batch, yourScoreName, 2*Gdx.graphics.getWidth()/3, 2*Gdx.graphics.getHeight()/3+00);
 
         game.batch.draw(bucketImage, bucket.x, bucket.y);
         for (Rectangle raindrop : raindrops) {
@@ -143,7 +146,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
                 iter.remove();
             }
         }
-        if ((score >= 10)  )
+        if ((score >= 50)  )
         {
             this.dispose();
             game.setScreen(new GameOverScreen(game));

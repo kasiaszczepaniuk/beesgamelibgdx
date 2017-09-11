@@ -25,7 +25,7 @@ public class ScrollingBackground {
         speed = 0;
         goalSpeed = default_speed;
 
-        imageScale = (float) Gdx.graphics.getHeight() / image.getHeight();
+
         speedFixed = true;
     }
 
@@ -43,6 +43,8 @@ public class ScrollingBackground {
         if (!speedFixed)
             speed += ACCELERATION * deltaTime;
 
+
+        imageScale = (float) ((Gdx.graphics.getWidth()/ 16)/100);
         x1 -= speed * deltaTime;
         x2 -= speed * deltaTime;
 

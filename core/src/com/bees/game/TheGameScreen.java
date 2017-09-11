@@ -52,7 +52,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
 
         // load the drop sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.wav"));
+        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
         // start the playback of the background music immediately
         rainMusic.setLooping(true);

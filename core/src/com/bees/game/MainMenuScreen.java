@@ -152,6 +152,9 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
         backgroundMenu.dispose();
         start.dispose();
+        stillgame.dispose();
+        quit.dispose();
+        Gdx.input.setInputProcessor(null);
 
     }
 

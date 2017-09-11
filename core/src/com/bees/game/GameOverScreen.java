@@ -122,6 +122,10 @@ public class GameOverScreen implements Screen{
 
     @Override
     public void dispose() {
+        gameoverback.dispose();
+        trybutton.dispose();
+        quit.dispose();
+        Gdx.input.setInputProcessor(null);
 
     }
 

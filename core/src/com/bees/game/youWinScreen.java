@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -27,11 +28,13 @@ public class youWinScreen implements Screen {
     private final int quitButtonWidth;
     private final Texture quitbutton;
     private final int quitButtonX;
+    private final SpriteBatch batch;
 
     public youWinScreen (final MyBeesGame game)
     {
 
         this.game = game;
+        batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
         winback = new Texture("winback.png");
@@ -87,14 +90,14 @@ public class youWinScreen implements Screen {
 
 
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
-        game.batch.draw(winback, 0, 0);
-        game.batch.draw(winbutton, winbuttonX, winButtonY);
-        game.batch.draw(quitbutton, quitButtonX,quitButtonY);
+        batch.begin();
+        batch.draw(winback, 0, 0);
+        batch.draw(winbutton, winbuttonX, winButtonY);
+        batch.draw(quitbutton, quitButtonX, quitButtonY);
 
-        game.batch.end();
+        batch.end();
 
     }
 
@@ -122,6 +125,7 @@ public class youWinScreen implements Screen {
     public void dispose() {
         winbutton.dispose();
         quitbutton.dispose();
+        batch.dispose();
         Gdx.input.setInputProcessor(null);
 
     }

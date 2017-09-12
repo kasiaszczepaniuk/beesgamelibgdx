@@ -6,8 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import static com.badlogic.gdx.scenes.scene2d.InputEvent.Type.touchDown;
 import static com.bees.game.MyBeesGame.HEIGHT;
 import static com.bees.game.MyBeesGame.WIDTH;
 
@@ -17,6 +17,7 @@ public class wrongAnswer implements Screen {
     private final MyBeesGame game;
     private final OrthographicCamera camera;
     private final Texture backgroundWrong;
+    private final SpriteBatch batch;
 
     public wrongAnswer (final MyBeesGame game){
 
@@ -30,14 +31,13 @@ public class wrongAnswer implements Screen {
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 //START BUTTON
 
+                wrongAnswer.this.dispose();
                 game.setScreen(new TheGameScreen(game));
-
-
-
                 return super.touchDown(screenX, screenY, pointer, button);
             }
         });
 
+        batch = new SpriteBatch();
     }
     @Override
     public void show() {
@@ -53,9 +53,9 @@ public class wrongAnswer implements Screen {
 
 
         camera.update();
-        game.batch.begin();
-        game.batch.draw(backgroundWrong, 0 , 0);
-        game.batch.end();
+        batch.begin();
+        batch.draw(backgroundWrong, 0, 0);
+        batch.end();
 
     }
 
@@ -81,11 +81,8 @@ public class wrongAnswer implements Screen {
 
     @Override
     public void dispose() {
-        Gdx.input.setInputProcessor(null);
         backgroundWrong.dispose();
-        game.batch.dispose();
-
-
-
+        batch.dispose();
+        Gdx.input.setInputProcessor(null);
     }
 }

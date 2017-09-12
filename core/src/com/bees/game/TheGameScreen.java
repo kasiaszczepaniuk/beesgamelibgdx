@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -18,11 +19,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.Iterator;
 
-import static com.bees.game.MyBeesGame.HEIGHT;
-import static com.bees.game.MyBeesGame.WIDTH;
-
 public class TheGameScreen extends MyBeesGame implements Screen {
     final MyBeesGame game;
+    private final SpriteBatch batch;
     private Texture flowerImage;
     private Texture dropImage;
     private Texture bucketImage;
@@ -50,6 +49,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
         yourBitmapFontName = new BitmapFont();
         yourBitmapFontName.getData().setScale(6);
 
+        batch = new SpriteBatch();
         dropImage = new Texture(Gdx.files.internal("honey.png"));
         bucketImage = new Texture(Gdx.files.internal("bee.png"));
         flowerImage = new Texture(Gdx.files.internal("flo.png"));
@@ -111,25 +111,25 @@ public class TheGameScreen extends MyBeesGame implements Screen {
         camera.update();
 
 
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch2.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
+//        batch2.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
+        batch.begin();
 
-        scrollingBackground.updateAndRender(Gdx.graphics.getDeltaTime(), game.batch);
+        scrollingBackground.updateAndRender(Gdx.graphics.getDeltaTime(), batch);
         yourBitmapFontName.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        yourBitmapFontName.draw(game.batch, yourScoreName, Gdx.graphics.getWidth()-400, Gdx.graphics.getHeight()-100);
+        yourBitmapFontName.draw(batch, yourScoreName, Gdx.graphics.getWidth() - 400, Gdx.graphics.getHeight() - 100);
 
-        game.batch.draw(bucketImage, bucket.x, bucket.y);
+        batch.draw(bucketImage, bucket.x, bucket.y);
         for (Rectangle raindrop : raindrops) {
-            game.batch.draw(dropImage, raindrop.x, raindrop.y);
+            batch.draw(dropImage, raindrop.x, raindrop.y);
         }
 
         for (Rectangle flower : flowers) {
-            game.batch.draw(flowerImage, flower.x, flower.y);
+            batch.draw(flowerImage, flower.x, flower.y);
         }
 
-        game.batch.end();
+        batch.end();
 
         if (Gdx.input.isTouched()) {
 
@@ -162,7 +162,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
             }
         }
 
-        if(Gdx.graphics.getDeltaTime()>=2) {
+
             if (TimeUtils.millis() / 100 - lastFlower > 1000000000) spawnFlolwer();
             Iterator<Rectangle> iter2 = flowers.iterator();
             while (iter2.hasNext()) {
@@ -174,16 +174,16 @@ public class TheGameScreen extends MyBeesGame implements Screen {
                     yourScoreName = "score: " + score;
                     iter.remove();
                     game.setScreen(new QuizScreen(game));
+                    dispose();
                 }
             }
-        }
+
 
         if ((score >= 100)  )
         {
-            this.dispose();
             game.setScreen(new GameOverScreen(game));
+            this.dispose();
             return;
-
         }
 
     }
@@ -219,5 +219,6 @@ public class TheGameScreen extends MyBeesGame implements Screen {
         flowerImage.dispose();
         dropSound.dispose();
         rainMusic.dispose();
+        batch.dispose();
     }
 }

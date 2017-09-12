@@ -6,10 +6,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-
-import javax.xml.transform.Templates;
 
 import static com.bees.game.MyBeesGame.HEIGHT;
 import static com.bees.game.MyBeesGame.WIDTH;
@@ -26,7 +25,7 @@ public class GameOverScreen implements Screen{
     private final Texture quit;
     private final int quitButtonX;
     OrthographicCamera camera;
-
+    public SpriteBatch batch;
 
     public GameOverScreen(final MyBeesGame game) {
 
@@ -90,13 +89,13 @@ public class GameOverScreen implements Screen{
 
 
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
-        game.batch.draw(gameoverback, 0, 0);
-        game.batch.draw(trybutton, trybuttonX , tryButtonY);
-        game.batch.draw(quit,quitButtonX, quitButtonY);
-        game.batch.end();
+        batch.begin();
+        batch.draw(gameoverback, 0, 0);
+        batch.draw(trybutton, trybuttonX, tryButtonY);
+        batch.draw(quit, quitButtonX, quitButtonY);
+        batch.end();
 
     }
 
@@ -125,7 +124,7 @@ public class GameOverScreen implements Screen{
         gameoverback.dispose();
         trybutton.dispose();
         quit.dispose();
-        Gdx.input.setInputProcessor(null);
+        batch.dispose();
 
     }
 

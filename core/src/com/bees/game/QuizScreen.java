@@ -3,29 +3,16 @@ package com.bees.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
-import database.Answer;
-import database.Question;
-
-import javax.xml.soap.Text;
-import java.awt.*;
-import java.sql.SQLException;
-import java.util.List;
 
 import static com.bees.game.MyBeesGame.HEIGHT;
 import static com.bees.game.MyBeesGame.WIDTH;
@@ -34,6 +21,7 @@ public class QuizScreen implements Screen {
     private final MyBeesGame game;
     private final OrthographicCamera camera;
     private final Texture backgroundMenu;
+    private final SpriteBatch batch;
     private Stage stage;
     private Skin skin;
     private Label labelka;
@@ -51,6 +39,7 @@ public class QuizScreen implements Screen {
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
         backgroundMenu = new Texture("questionback.png");
+        batch = new SpriteBatch();
     }
 
     @Override
@@ -75,27 +64,32 @@ public class QuizScreen implements Screen {
         textstyle.checked = skin.newDrawable("white", Color.BLUE);
         textstyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
         stage.setViewport(new ScreenViewport());
-        String url = "jdbc:sqlite:sample.db";
-
-        ConnectionSource connectionSource = null;
-        TextButton button1 = null;
-        try {
-            connectionSource = new JdbcConnectionSource(url);
-            Dao<Question, String> questionDao = DaoManager.createDao(connectionSource, Question.class);
-            List<Question> questions = questionDao.queryForAll();
-
-//            Question question = questions.get(2);
-//            button1 = new TextButton(question.toString(), textstyle);
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        String url = "jdbc:sqlite:sample.db";
+//
+//        ConnectionSource connectionSource = null;
+//        TextButton button1 = null;
+//        try {
+//            connectionSource = new JdbcConnectionSource(url);
+//            Dao<Question, String> questionDao = DaoManager.createDao(connectionSource, Question.class);
+//            List<Question> questions = questionDao.queryForAll();
+//
+////            Question question = questions.get(2);
+////            button1 = new TextButton(question.toString(), textstyle);
+//
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
 
         skin.add("default", textstyle);
 
-        TextButton pytanie = new TextButton("Co to za zwirz?", skin);
+//        TextButton pytanie = new TextButton("Co to za zwirz?", skin);
+
+        Image pytanie = new Image();
+        pytanie.setDrawable(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("2.png")))));
+        pytanie.setSize(200, 200);
+        pytanie.setScaling(Scaling.fit);
 
         TextButton odp1 = new TextButton("niedzwiedz", skin);
         TextButton odp2 = new TextButton("pies", skin);
@@ -103,7 +97,8 @@ public class QuizScreen implements Screen {
 
 
         Table odpowiedzi = new Table();
-
+        odpowiedzi.setHeight(500);
+//        odpowiedzi.setFillParent(true);
 
         odpowiedzi.add(pytanie);
         odpowiedzi.row();
@@ -118,32 +113,32 @@ public class QuizScreen implements Screen {
         pytanie.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                QuizScreen.this.dispose();
                 game.setScreen(new MainMenuScreen(game));
-
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
         odp1.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                QuizScreen.this.dispose();
                 game.setScreen(new RightAnswer(game));
-
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
         odp2.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                QuizScreen.this.dispose();
                 game.setScreen(new wrongAnswer(game));
-
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
         odp3.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                QuizScreen.this.dispose();
                 game.setScreen(new wrongAnswer(game));
-
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -151,8 +146,6 @@ public class QuizScreen implements Screen {
 
         stage.addActor(odpowiedzi);
         Gdx.input.setInputProcessor(stage);
-
-
     }
 
     @Override
@@ -160,17 +153,14 @@ public class QuizScreen implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
 
-        game.batch.draw(backgroundMenu, 0, 0);
-        game.batch.end();
+        batch.draw(backgroundMenu, 0, 0);
+        batch.end();
 
         stage.act(delta);
         stage.draw();
-
-
-
     }
 
     @Override
@@ -196,8 +186,7 @@ public class QuizScreen implements Screen {
 
     @Override
     public void dispose() {
-
-    game.batch.dispose();
-
+        batch.dispose();
+        Gdx.input.setInputProcessor(null);
     }
 }

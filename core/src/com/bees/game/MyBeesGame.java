@@ -1,9 +1,6 @@
 package com.bees.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -20,8 +17,8 @@ public class MyBeesGame extends Game {
 
     public static final int WIDTH = 1600;
     public static final int HEIGHT = 900;
-    public SpriteBatch batch2;
-    public SpriteBatch batch;
+    //    public SpriteBatch batch2;
+//    public SpriteBatch batch;
     private Question question2;
 
 
@@ -30,8 +27,8 @@ public class MyBeesGame extends Game {
     public void create() {
 
         initialDatabase();
-        batch = new SpriteBatch();
-        batch2 = new SpriteBatch();
+//        batch = new SpriteBatch();
+//        batch2 = new SpriteBatch();
         this.setScreen(new MainMenuScreen(this));
     }
 
@@ -44,7 +41,7 @@ public class MyBeesGame extends Game {
 
     public void dispose() {
 
-        batch.dispose();
+//        batch.dispose();
     }
 
     public void resize(int width, int height) {

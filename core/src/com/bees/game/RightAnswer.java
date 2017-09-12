@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import static com.bees.game.MyBeesGame.HEIGHT;
 import static com.bees.game.MyBeesGame.WIDTH;
@@ -14,9 +15,10 @@ public class RightAnswer implements Screen {
 
     private final MyBeesGame game;
     private final Texture backgroundRight;
+    private final SpriteBatch batch;
     private OrthographicCamera camera;
 
-    public RightAnswer (final MyBeesGame game){
+    public RightAnswer(final MyBeesGame game) {
 
         this.game = game;
         camera = new OrthographicCamera();
@@ -28,14 +30,14 @@ public class RightAnswer implements Screen {
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 //START BUTTON
 
-                    game.setScreen(new TheGameScreen(game));
-
+                RightAnswer.this.dispose();
+                game.setScreen(new TheGameScreen(game));
 
                 return super.touchDown(screenX, screenY, pointer, button);
             }
         });
 
-
+        batch = new SpriteBatch();
 
     }
 
@@ -50,14 +52,10 @@ public class RightAnswer implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-
         camera.update();
-        game.batch.begin();
-        game.batch.draw(backgroundRight, 0 , 0);
-        game.batch.end();
-
-
-
+        batch.begin();
+        batch.draw(backgroundRight, 0, 0);
+        batch.end();
     }
 
     @Override
@@ -82,12 +80,8 @@ public class RightAnswer implements Screen {
 
     @Override
     public void dispose() {
-
-        Gdx.input.setInputProcessor(null);
-        game.batch.dispose();
+        batch.dispose();
         backgroundRight.dispose();
-
-
-
+        Gdx.input.setInputProcessor(null);
     }
 }

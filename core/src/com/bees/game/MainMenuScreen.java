@@ -16,6 +16,7 @@ import static com.bees.game.MyBeesGame.WIDTH;
 public class MainMenuScreen implements Screen {
 
     final MyBeesGame game;
+    private final SpriteBatch batch;
     public Texture backgroundMenu;
     public SpriteBatch batch3;
     OrthographicCamera camera;
@@ -91,6 +92,8 @@ public class MainMenuScreen implements Screen {
                 return super.touchDown(screenX, screenY, pointer, button);
             }
         });
+
+        batch = new SpriteBatch();
     }
 
 
@@ -109,16 +112,16 @@ public class MainMenuScreen implements Screen {
 
 
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
 
-        game.batch.draw(backgroundMenu, 0, 0);
-        game.batch.draw(start, buttonX, playButtonY);
-        game.batch.draw(stillgame, conButtonX, conButtonY);
-        game.batch.draw(quit, quitButtonX, quitButtonY);
+        batch.draw(backgroundMenu, 0, 0);
+        batch.draw(start, buttonX, playButtonY);
+        batch.draw(stillgame, conButtonX, conButtonY);
+        batch.draw(quit, quitButtonX, quitButtonY);
 
 
-        game.batch.end();
+        batch.end();
 
 //        if (Gdx.input.isTouched()) {
 //            if(start.getWidth())
@@ -154,8 +157,7 @@ public class MainMenuScreen implements Screen {
         start.dispose();
         stillgame.dispose();
         quit.dispose();
-        Gdx.input.setInputProcessor(null);
-
+        batch.dispose();
     }
 
     public Vector2 getInputInGameWorld(OrthographicCamera cam) {

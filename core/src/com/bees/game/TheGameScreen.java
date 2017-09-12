@@ -23,6 +23,7 @@ import static com.bees.game.MyBeesGame.WIDTH;
 
 public class TheGameScreen extends MyBeesGame implements Screen {
     final MyBeesGame game;
+    private Texture flowerImage;
     private Texture dropImage;
     private Texture bucketImage;
     private Sound dropSound;
@@ -30,7 +31,9 @@ public class TheGameScreen extends MyBeesGame implements Screen {
     private OrthographicCamera camera;
     private Rectangle bucket;
     private Array<Rectangle> raindrops;
+    private Array<Rectangle> flowers;
     private long lastDropTime;
+    private long lastFlower;
     public ScrollingBackground scrollingBackground;
     public int score;
     public String yourScoreName;
@@ -49,6 +52,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
 
         dropImage = new Texture(Gdx.files.internal("honey.png"));
         bucketImage = new Texture(Gdx.files.internal("bee.png"));
+        flowerImage = new Texture(Gdx.files.internal("flo.png"));
 
         // load the drop sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
@@ -69,6 +73,9 @@ public class TheGameScreen extends MyBeesGame implements Screen {
 
         raindrops = new Array<Rectangle>();
         spawnRaindrop();
+        flowers = new Array<Rectangle>();
+        spawnFlolwer();
+
 
 
     }
@@ -81,6 +88,15 @@ public class TheGameScreen extends MyBeesGame implements Screen {
         raindrop.height = 64;
         raindrops.add(raindrop);
         lastDropTime = TimeUtils.nanoTime();
+    }
+    private void spawnFlolwer() {
+        Rectangle flower = new Rectangle();
+        flower.y =0;
+        flower.x = WIDTH;
+        flower.width = 548;
+        flower.height = Gdx.graphics.getHeight();
+        flowers.add(flower);
+        lastFlower = TimeUtils.millis();
     }
 
 
@@ -109,6 +125,10 @@ public class TheGameScreen extends MyBeesGame implements Screen {
             game.batch.draw(dropImage, raindrop.x, raindrop.y);
         }
 
+        for (Rectangle flower : flowers) {
+            game.batch.draw(flowerImage, flower.x, flower.y);
+        }
+
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
@@ -119,18 +139,16 @@ public class TheGameScreen extends MyBeesGame implements Screen {
 //            bucket.y = touchPos.y - 64 / 2;
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) bucket.x -= 200 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) bucket.x += 200 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) bucket.y-= 200 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) bucket.y += 200 * Gdx.graphics.getDeltaTime();
         // make sure the bucket stays within the screen bounds
         if (bucket.y < 0) bucket.y = 0;
         if (bucket.y > HEIGHT - 64) bucket.y = HEIGHT - 64;
 
-        // check if we need to create a new raindrop
+
         if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
 
-        // move the raindrops, remove any that are beneath the bottom edge of
-        // the screen or that hit the bucket. In the later case we play back
-        // a sound effect as well.
+
         Iterator<Rectangle> iter = raindrops.iterator();
         while (iter.hasNext()) {
             Rectangle raindrop = iter.next();
@@ -143,7 +161,24 @@ public class TheGameScreen extends MyBeesGame implements Screen {
                 iter.remove();
             }
         }
-        if ((score >= 10)  )
+
+        if(Gdx.graphics.getDeltaTime()>=2) {
+            if (TimeUtils.millis() / 100 - lastFlower > 1000000000) spawnFlolwer();
+            Iterator<Rectangle> iter2 = flowers.iterator();
+            while (iter2.hasNext()) {
+                Rectangle flower = iter2.next();
+                flower.x -= 200 * Gdx.graphics.getDeltaTime();
+                if (flower.x < 0) iter2.remove();
+                if (flower.overlaps(bucket)) {
+                    score = score + 10;
+                    yourScoreName = "score: " + score;
+                    iter.remove();
+                    game.setScreen(new QuizScreen(game));
+                }
+            }
+        }
+
+        if ((score >= 100)  )
         {
             this.dispose();
             game.setScreen(new GameOverScreen(game));
@@ -181,6 +216,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
     public void dispose() {
         dropImage.dispose();
         bucketImage.dispose();
+        flowerImage.dispose();
         dropSound.dispose();
         rainMusic.dispose();
     }

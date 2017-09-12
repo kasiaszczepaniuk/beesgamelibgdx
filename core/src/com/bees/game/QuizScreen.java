@@ -2,67 +2,155 @@ package com.bees.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+import database.Answer;
+import database.Question;
 
+import javax.xml.soap.Text;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.List;
+
+import static com.bees.game.MyBeesGame.HEIGHT;
+import static com.bees.game.MyBeesGame.WIDTH;
 
 public class QuizScreen implements Screen {
     private final MyBeesGame game;
+    private final OrthographicCamera camera;
+    private final Texture backgroundMenu;
     private Stage stage;
+    private Skin skin;
+    private Label labelka;
+//    FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/FjallaOne-Regular.ttf"));
+//    FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+//    parameter.size = 12;
+//    BitmapFont font12
 
     public QuizScreen(MyBeesGame stage) {
+
+
         game = stage;
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, WIDTH, HEIGHT);
+
+        backgroundMenu = new Texture("questionback.png");
     }
 
     @Override
     public void show() {
 
         stage = new Stage();
-        stage.setViewport(new ScreenViewport());
+
+
+        skin = new Skin();
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        skin.add("white", new Texture(pixmap));
+
 
         TextButton.TextButtonStyle textstyle = new TextButton.TextButtonStyle();
-        textstyle.fontColor = Color.BLUE;
+        textstyle.fontColor = Color.BLACK;
         BitmapFont font = new BitmapFont();
         textstyle.font = font;
-        TextButton pytanie = new TextButton("byleco",textstyle);
+        textstyle.up = skin.newDrawable("white", Color.WHITE);
+        textstyle.down = skin.newDrawable("white", Color.WHITE);
+        textstyle.checked = skin.newDrawable("white", Color.BLUE);
+        textstyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        stage.setViewport(new ScreenViewport());
+        String url = "jdbc:sqlite:sample.db";
 
-        TextButton odp1 = new TextButton("kot", textstyle);
-        TextButton odp2 = new TextButton("kot", textstyle);
-        TextButton odp3 = new TextButton("kot", textstyle);
+        ConnectionSource connectionSource = null;
+        TextButton button1 = null;
+        try {
+            connectionSource = new JdbcConnectionSource(url);
+            Dao<Question, String> questionDao = DaoManager.createDao(connectionSource, Question.class);
+            List<Question> questions = questionDao.queryForAll();
+
+//            Question question = questions.get(2);
+//            button1 = new TextButton(question.toString(), textstyle);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        skin.add("default", textstyle);
+
+        TextButton pytanie = new TextButton("Co to za zwirz?", skin);
+
+        TextButton odp1 = new TextButton("niedzwiedz", skin);
+        TextButton odp2 = new TextButton("pies", skin);
+        TextButton odp3 = new TextButton("kot", skin);
 
 
         Table odpowiedzi = new Table();
 
+
         odpowiedzi.add(pytanie);
         odpowiedzi.row();
-        odpowiedzi.add(odp1, odp2, odp3);
-        odpowiedzi.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+        odpowiedzi.add(odp1);
+        odpowiedzi.row();
+        odpowiedzi.add(odp2);
+        odpowiedzi.row();
+        odpowiedzi.add(odp3);
+        odpowiedzi.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
 
-
-        pytanie.addListener(new InputListener(){
+        pytanie.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new MainMenuScreen(game));
 
                 return super.touchDown(event, x, y, pointer, button);
-            }});
+            }
+        });
+        odp1.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new RightAnswer(game));
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        odp2.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new wrongAnswer(game));
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        odp3.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new wrongAnswer(game));
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
 
         stage.addActor(odpowiedzi);
         Gdx.input.setInputProcessor(stage);
-
 
 
     }
@@ -71,6 +159,12 @@ public class QuizScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+
+        game.batch.draw(backgroundMenu, 0, 0);
+        game.batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -102,6 +196,8 @@ public class QuizScreen implements Screen {
 
     @Override
     public void dispose() {
+
+    game.batch.dispose();
 
     }
 }

@@ -1,6 +1,8 @@
 package com.bees.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -20,6 +22,8 @@ public class MyBeesGame extends Game {
     public static final int HEIGHT = 900;
     public SpriteBatch batch2;
     public SpriteBatch batch;
+    private Question question2;
+
 
 
     @Override
@@ -28,7 +32,7 @@ public class MyBeesGame extends Game {
         initialDatabase();
         batch = new SpriteBatch();
         batch2 = new SpriteBatch();
-        this.setScreen(new QuizScreen(this));
+        this.setScreen(new MainMenuScreen(this));
     }
 
 
@@ -60,18 +64,50 @@ public class MyBeesGame extends Game {
             TableUtils.createTable(connectionSource, Question.class);
             TableUtils.createTable(connectionSource, Answer.class);
 
-            Question question = new Question("Co to za zwirz?");
-            Answer answer = new Answer("małpa", question);
+            //QUESTION1 - RIGHT ANSWER - card
+            Question question = new Question("What's that?");
+            Answer answer = new Answer("cat", question);
+            answersDao.create(answer);
+            answer = new Answer("cow", question);
+            answersDao.create(answer);
+            answer = new Answer("card", question);
+            answersDao.create(answer);
+            answer = new Answer("notebook", question);
             answersDao.create(answer);
 
-            answer = new Answer("pies", question);
+            //QUESTION2 - RIGHT ANSWER - bear
+            Question question2 = new Question("What's that?");
+            answer = new Answer("bear", question2);
+            answersDao.create(answer);
+            answer = new Answer("doll", question2);
+            answersDao.create(answer);
+            answer = new Answer("robot", question2);
+            answersDao.create(answer);
+            answer = new Answer("plane", question2);
             answersDao.create(answer);
 
-            answer = new Answer("kot", question);
+            //QUESTION3 - RIGHT ANSWER - wagon
+            Question question3 = new Question("What's that?");
+            answer = new Answer("plane", question3);
+            answersDao.create(answer);
+            answer = new Answer("bus", question3);
+            answersDao.create(answer);
+            answer = new Answer("car", question3);
+            answersDao.create(answer);
+            answer = new Answer("wagon", question3);
             answersDao.create(answer);
 
-            answer = new Answer("sowa", question);
+            //QUESTION4 - RIGHT ANSWER - apple
+            Question question4 = new Question("What's that?");
+            answer = new Answer("pumpkin", question4);
             answersDao.create(answer);
+            answer = new Answer("apple", question4);
+            answersDao.create(answer);
+            answer = new Answer("orange", question4);
+            answersDao.create(answer);
+            answer = new Answer("banana", question4);
+            answersDao.create(answer);
+
 
             connectionSource.close();
         } catch (SQLException exception) {

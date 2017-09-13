@@ -53,6 +53,7 @@ public class wrongAnswer implements Screen {
 
 
         camera.update();
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(backgroundWrong, 0, 0);
         batch.end();

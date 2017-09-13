@@ -42,7 +42,7 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
-        backgroundMenu = new Texture("backbuttons.png");
+        backgroundMenu = new Texture(Gdx.files.internal("backbuttons.png"));
         start = new Texture(Gdx.files.internal("start.png"));
 
         stillgame = new Texture(Gdx.files.internal("continue.png"));
@@ -158,6 +158,8 @@ public class MainMenuScreen implements Screen {
         stillgame.dispose();
         quit.dispose();
         batch.dispose();
+        Gdx.input.setInputProcessor(null);
+
     }
 
     public Vector2 getInputInGameWorld(OrthographicCamera cam) {

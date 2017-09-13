@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -56,7 +57,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
 
         // load the drop sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.wav"));
 
         // start the playback of the background music immediately
         rainMusic.setLooping(true);
@@ -93,7 +94,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
         Rectangle flower = new Rectangle();
         flower.y =0;
         flower.x = WIDTH;
-        flower.width = 548;
+        flower.width = 50;
         flower.height = Gdx.graphics.getHeight();
         flowers.add(flower);
         lastFlower = TimeUtils.millis();
@@ -112,7 +113,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
 
 
         batch.setProjectionMatrix(camera.combined);
-//        batch2.setProjectionMatrix(camera.combined);
+
 
         batch.begin();
 
@@ -136,7 +137,7 @@ public class TheGameScreen extends MyBeesGame implements Screen {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
             bucket.y = Interpolation.linear.apply(bucket.y, touchPos.y, 0.05f);
-//            bucket.y = touchPos.y - 64 / 2;
+
 
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) bucket.y-= 200 * Gdx.graphics.getDeltaTime();
@@ -161,6 +162,9 @@ public class TheGameScreen extends MyBeesGame implements Screen {
                 iter.remove();
             }
         }
+
+
+
 
 
             if (TimeUtils.millis() / 100 - lastFlower > 1000000000) spawnFlolwer();

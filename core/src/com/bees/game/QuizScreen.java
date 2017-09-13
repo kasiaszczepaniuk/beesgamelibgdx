@@ -49,21 +49,31 @@ public class QuizScreen implements Screen {
 
 
         skin = new Skin();
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(100, 40, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
         skin.add("white", new Texture(pixmap));
 
 
         TextButton.TextButtonStyle textstyle = new TextButton.TextButtonStyle();
-        textstyle.fontColor = Color.BLACK;
+
         BitmapFont font = new BitmapFont();
         textstyle.font = font;
+
+
+        textstyle.fontColor = Color.BLACK;
+
         textstyle.up = skin.newDrawable("white", Color.WHITE);
         textstyle.down = skin.newDrawable("white", Color.WHITE);
         textstyle.checked = skin.newDrawable("white", Color.BLUE);
         textstyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+
+
+
         stage.setViewport(new ScreenViewport());
+
+
+
 //        String url = "jdbc:sqlite:sample.db";
 //
 //        ConnectionSource connectionSource = null;
@@ -94,6 +104,10 @@ public class QuizScreen implements Screen {
         TextButton odp1 = new TextButton("niedzwiedz", skin);
         TextButton odp2 = new TextButton("pies", skin);
         TextButton odp3 = new TextButton("kot", skin);
+         odp1.getLabel().setFontScale(2.0f);
+         odp2.getLabel().setFontScale(2.0f);
+         odp3.getLabel().setFontScale(2.0f);
+
 
 
         Table odpowiedzi = new Table();
@@ -186,7 +200,13 @@ public class QuizScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
+
         Gdx.input.setInputProcessor(null);
+        batch.dispose();
+        stage.dispose();
+
+
+
+
     }
 }

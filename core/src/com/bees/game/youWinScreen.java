@@ -16,7 +16,7 @@ import static com.bees.game.MyBeesGame.WIDTH;
 public class youWinScreen implements Screen {
 
 
-    final MyBeesGame game;
+
     private final OrthographicCamera camera;
     private final Texture winback;
     public final Texture winbutton;
@@ -30,10 +30,10 @@ public class youWinScreen implements Screen {
     private final int quitButtonX;
     private final SpriteBatch batch;
 
-    public youWinScreen (final MyBeesGame game)
+    public youWinScreen()
     {
 
-        this.game = game;
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
@@ -57,8 +57,9 @@ public class youWinScreen implements Screen {
                 //TRY BUTTON
                 if ((winbuttonX < screenX && winbuttonX + winButtonWidth > screenX)
                         && (MyBeesGame.HEIGHT - getInputInGameWorld(camera).y < winButtonY + winbutton.getHeight() && MyBeesGame.HEIGHT - getInputInGameWorld(camera).y > winButtonY)) {
-                    dispose();
-                    game.setScreen(new TheGameScreen(game));
+
+                    ScreenManager.getInstance().showScreen(ScreenEnum.GAME);
+
                 }
                 //QUIT BUTTON
                 if ((quitButtonX < screenX && quitButtonX + quitButtonWidth > screenX)

@@ -15,7 +15,6 @@ import static com.bees.game.MyBeesGame.WIDTH;
 
 public class MainMenuScreen implements Screen {
 
-    final MyBeesGame game;
     private final SpriteBatch batch;
     public Texture backgroundMenu;
     public SpriteBatch batch3;
@@ -34,11 +33,7 @@ public class MainMenuScreen implements Screen {
     private int quitButtonX;
 
 
-
-
-    public MainMenuScreen(final MyBeesGame game) {
-        this.game = game;
-
+    public MainMenuScreen() {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
@@ -75,8 +70,8 @@ public class MainMenuScreen implements Screen {
                 //START BUTTON
                 if ((buttonX < screenX && buttonX + playButtonWidth > screenX)
                         && (MyBeesGame.HEIGHT - getInputInGameWorld(camera).y < playButtonY + start.getHeight() && MyBeesGame.HEIGHT - getInputInGameWorld(camera).y > playButtonY)) {
-                    dispose();
-                    game.setScreen(new TheGameScreen(game));
+
+                    ScreenManager.getInstance().showScreen(ScreenEnum.GAME);
                 }
 
 

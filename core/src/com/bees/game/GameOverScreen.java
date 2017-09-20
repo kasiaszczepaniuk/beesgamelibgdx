@@ -14,7 +14,7 @@ import static com.bees.game.MyBeesGame.HEIGHT;
 import static com.bees.game.MyBeesGame.WIDTH;
 
 public class GameOverScreen implements Screen{
-    final MyBeesGame game;
+
     public final Texture gameoverback;
     public final Texture trybutton;
     private final int tryButtonWidth;
@@ -27,9 +27,9 @@ public class GameOverScreen implements Screen{
     OrthographicCamera camera;
     public SpriteBatch batch;
 
-    public GameOverScreen(final MyBeesGame game) {
+    public GameOverScreen() {
 
-        this.game = game;
+        batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
@@ -54,8 +54,8 @@ public class GameOverScreen implements Screen{
                 //TRY BUTTON
                 if ((trybuttonX < screenX && trybuttonX + tryButtonWidth > screenX)
                         && (MyBeesGame.HEIGHT - getInputInGameWorld(camera).y < tryButtonY + trybutton.getHeight() && MyBeesGame.HEIGHT - getInputInGameWorld(camera).y > tryButtonY)) {
-                    dispose();
-                    game.setScreen(new TheGameScreen(game));
+                    ScreenManager.getInstance().showScreen(ScreenEnum.GAME);
+
                 }
                 //QUIT BUTTON
                 if ((quitButtonX < screenX && quitButtonX + quitButtonWidth > screenX)

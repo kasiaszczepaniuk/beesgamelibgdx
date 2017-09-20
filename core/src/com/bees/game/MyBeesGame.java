@@ -17,35 +17,12 @@ public class MyBeesGame extends Game {
 
     public static final int WIDTH = 1600;
     public static final int HEIGHT = 900;
-    //    public SpriteBatch batch2;
-//    public SpriteBatch batch;
-    private Question question2;
-
-
 
     @Override
     public void create() {
-
         initialDatabase();
-//        batch = new SpriteBatch();
-//        batch2 = new SpriteBatch();
-        this.setScreen(new MainMenuScreen(this));
-    }
-
-
-    public void render() {
-        super.render();
-
-    }
-
-
-    public void dispose() {
-
-//        batch.dispose();
-    }
-
-    public void resize(int width, int height) {
-
+        ScreenManager.getInstance().initialize(this);
+        ScreenManager.getInstance().showScreen(ScreenEnum.MENU);
     }
 
     private void initialDatabase() {

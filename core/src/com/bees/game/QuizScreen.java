@@ -1,8 +1,10 @@
 package com.bees.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,33 +19,23 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import static com.bees.game.MyBeesGame.HEIGHT;
 import static com.bees.game.MyBeesGame.WIDTH;
 
-public class QuizScreen implements Screen {
-    private final MyBeesGame game;
+public class QuizScreen {
+
     private final OrthographicCamera camera;
     private final Texture backgroundMenu;
     private final SpriteBatch batch;
     private Stage stage;
     private Skin skin;
     private Label labelka;
-//    FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/FjallaOne-Regular.ttf"));
-//    FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-//    parameter.size = 12;
-//    BitmapFont font12
+    private TheGameScreen gameScreen;
 
-    public QuizScreen(MyBeesGame stage) {
-
-
-        game = stage;
-
+    public QuizScreen(final TheGameScreen gameScreen) {
+        this.gameScreen = gameScreen;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
         backgroundMenu = new Texture("questionback.png");
         batch = new SpriteBatch();
-    }
-
-    @Override
-    public void show() {
 
         stage = new Stage();
 
@@ -69,9 +61,7 @@ public class QuizScreen implements Screen {
         textstyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
 
-
         stage.setViewport(new ScreenViewport());
-
 
 
 //        String url = "jdbc:sqlite:sample.db";
@@ -104,11 +94,9 @@ public class QuizScreen implements Screen {
         TextButton odp1 = new TextButton("niedzwiedz", skin);
         TextButton odp2 = new TextButton("pies", skin);
         TextButton odp3 = new TextButton("kot", skin);
-         odp1.getLabel().setFontScale(2.0f);
-         odp2.getLabel().setFontScale(2.0f);
-         odp3.getLabel().setFontScale(2.0f);
-
-
+        odp1.getLabel().setFontScale(2.0f);
+        odp2.getLabel().setFontScale(2.0f);
+        odp3.getLabel().setFontScale(2.0f);
 
         Table odpowiedzi = new Table();
         odpowiedzi.setHeight(500);
@@ -127,86 +115,80 @@ public class QuizScreen implements Screen {
         pytanie.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                QuizScreen.this.dispose();
-                game.setScreen(new MainMenuScreen(game));
+                gameScreen.returnFromQuizScreen(TheGameScreen.GameState.RUNNING);
+                Gdx.input.setInputProcessor(null);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
         odp1.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                QuizScreen.this.dispose();
-                game.setScreen(new RightAnswer(game));
+
+                gameScreen.showRightAnswer();
+                Gdx.input.setInputProcessor(null);
                 return super.touchDown(event, x, y, pointer, button);
+//                ScreenManager.getInstance().showScreen(ScreenEnum.RIGHT_ANSWER);
+//
+//                return super.touchDown(event, x, y, pointer, button);
             }
         });
         odp2.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                QuizScreen.this.dispose();
-                game.setScreen(new wrongAnswer(game));
+                ScreenManager.getInstance().showScreen(ScreenEnum.WRONG_ANSWER);
+
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
         odp3.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                QuizScreen.this.dispose();
-                game.setScreen(new wrongAnswer(game));
+                ScreenManager.getInstance().showScreen(ScreenEnum.WRONG_ANSWER);
+
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-
         stage.addActor(odpowiedzi);
-        Gdx.input.setInputProcessor(stage);
     }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    public void render() {
+        Gdx.input.setInputProcessor(stage);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        batch.draw(backgroundMenu, 0, 0);
+//        batch.draw(backgroundMenu, 0, 0);
         batch.end();
 
-        stage.act(delta);
+        stage.act();
         stage.draw();
     }
 
-    @Override
+    //    @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
-
     }
 
-    @Override
-    public void pause() {
+//    @Override
+//    public void pause() {
+//
+//    }
+//
+//    @Override
+//    public void resume() {
+//
+//    }
+//
+//    @Override
+//    public void hide() {
+//
+//    }
+//
+//    @Override
 
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
-
-        Gdx.input.setInputProcessor(null);
         batch.dispose();
         stage.dispose();
-
-
-
-
     }
 }

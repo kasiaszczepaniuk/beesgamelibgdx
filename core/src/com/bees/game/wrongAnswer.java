@@ -14,14 +14,12 @@ import static com.bees.game.MyBeesGame.WIDTH;
 public class wrongAnswer implements Screen {
 
 
-    private final MyBeesGame game;
     private final OrthographicCamera camera;
     private final Texture backgroundWrong;
     private final SpriteBatch batch;
 
-    public wrongAnswer (final MyBeesGame game){
+    public wrongAnswer() {
 
-        this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
         backgroundWrong = new Texture("badanswer.png");
@@ -31,8 +29,8 @@ public class wrongAnswer implements Screen {
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 //START BUTTON
 
-                wrongAnswer.this.dispose();
-                game.setScreen(new TheGameScreen(game));
+                ScreenManager.getInstance().showScreen(ScreenEnum.GAME);
+
                 return super.touchDown(screenX, screenY, pointer, button);
             }
         });
